@@ -38,6 +38,7 @@
         .back-to-top.visible{opacity:1;visibility:visible}
         .back-to-top:hover{transform:translateY(-2px);background:var(--primary-hover)}
         .back-to-top svg{width:20px;height:20px}
+        .hero-mockup-inner img{min-height:220px;object-fit:cover}
         @media(max-width:768px){.nav-links,.nav-actions{display:none}.nav-hamburger{display:block}}
 
         /* Buttons */
@@ -168,6 +169,7 @@
         .back-to-top.visible{opacity:1;visibility:visible}
         .back-to-top:hover{transform:translateY(-2px);background:var(--primary-hover)}
         .back-to-top svg{width:20px;height:20px}
+        .hero-mockup-inner img{min-height:220px;object-fit:cover}
         @media(max-width:768px){
             h1{font-size:40px}h2{font-size:32px}h3{font-size:28px}
             .hero .container{flex-direction:column-reverse;gap:32px}
@@ -245,14 +247,9 @@
                     <svg class="icon-sparkle svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
                     Generate blog post about AI trends
                 </div>
-                <div class="hero-mockup-inner">
-                    <div class="mockup-header"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span></div>
-                    <div class="mockup-line" style="width:80%"></div>
-                    <div class="mockup-line" style="width:90%"></div>
-                    <div class="mockup-line short"></div>
-                    <div class="mockup-line" style="width:70%"></div>
-                    <div class="mockup-line" style="width:85%"></div>
-                    <div class="mockup-line short"></div>
+                <div class="hero-mockup-inner" style="padding:0;overflow:hidden;background:transparent;box-shadow:none">
+                    <div class="mockup-header" style="padding:12px 16px"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span></div>
+                    <img src="https://picsum.photos/seed/jasperdash/580/340" alt="Jasper Dashboard" style="width:100%;display:block;border-radius:0 0 12px 12px" loading="lazy"/>
                 </div>
             </div>
         </div>
@@ -325,9 +322,7 @@
                 <p>Connect your data, strategy, and creative process into an automated system that delivers on-brand assets — from idea to publication — without the busywork.</p>
                 <span class="alt-link" onclick="demoAlert('Content Pipelines','Automate your entire content lifecycle from ideation to publishing with AI-powered pipelines.')">Learn more →</span>
             </div>
-            <div class="alt-image">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
-            </div>
+            <div class="alt-image" style="padding:0;overflow:hidden"><img src="https://picsum.photos/seed/workflow/560/380" alt="Feature illustration" style="width:100%;height:100%;object-fit:cover;border-radius:16px" loading="lazy"/></div>
         </div>
         <div class="alt-row reverse">
             <div class="alt-text">
@@ -335,9 +330,7 @@
                 <p>From SEO and personalization to global campaigns and ecommerce, Jasper helps teams launch more — and better — content, faster.</p>
                 <span class="alt-link" onclick="demoAlert('Channel Agents','Deploy specialized AI agents for SEO, social media, email, ads, and more — all from one platform.')">Explore agents →</span>
             </div>
-            <div class="alt-image">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-            </div>
+            <div class="alt-image" style="padding:0;overflow:hidden"><img src="https://picsum.photos/seed/analytics/560/380" alt="Feature illustration" style="width:100%;height:100%;object-fit:cover;border-radius:16px" loading="lazy"/></div>
         </div>
         <div class="alt-row">
             <div class="alt-text">
@@ -345,9 +338,7 @@
                 <p>Bring your brand guidelines, tone, and messaging into every asset, ensuring authenticity and alignment across every channel and market.</p>
                 <span class="alt-link" onclick="demoAlert('Jasper IQ','Train Jasper on your brand voice, style guide, and messaging — then scale across every channel.')">See how it works →</span>
             </div>
-            <div class="alt-image">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 3 3 0 0 0 .34 5.58 2.5 2.5 0 0 0 2.96 3.08 2.5 2.5 0 0 0 4.91.05L12 20V4.5Z"/><path d="M16 8V5c0-1.1.9-2 2-2"/><path d="M12 13h4"/><path d="M12 18h4a2 2 0 0 0 2-2v-1"/><path d="M12 8h4"/><circle cx="18" cy="5" r="1"/></svg>
-            </div>
+            <div class="alt-image" style="padding:0;overflow:hidden"><img src="https://picsum.photos/seed/creative/560/380" alt="Feature illustration" style="width:100%;height:100%;object-fit:cover;border-radius:16px" loading="lazy"/></div>
         </div>
     </div>
 </section>
@@ -379,7 +370,7 @@
                     <li><svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Basic support</li>
                     <li><svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> 1 brand voice</li>
                 </ul>
-                <span class="btn btn-secondary" style="width:100%;justify-content:center" onclick="selectPlan('Creator')">Get started</span>
+                <span class="btn btn-secondary" style="width:100%;justify-content:center" onclick="location.href='checkout.html?plan=Creator'">Get started</span>
             </div>
             <div class="pricing-card featured">
                 <div class="pricing-badge">Most popular</div>
@@ -393,7 +384,7 @@
                     <li><svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> 5 brand voices</li>
                     <li><svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Analytics dashboard</li>
                 </ul>
-                <span class="btn btn-primary" style="width:100%;justify-content:center" onclick="selectPlan('Pro')">Start free trial</span>
+                <span class="btn btn-primary" style="width:100%;justify-content:center" onclick="location.href='checkout.html?plan=Pro'">Start free trial</span>
             </div>
             <div class="pricing-card">
                 <div class="pricing-name">Business</div>
@@ -407,7 +398,7 @@
                     <li><svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> API access</li>
                     <li><svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> SLA guarantee</li>
                 </ul>
-                <span class="btn btn-secondary" style="width:100%;justify-content:center" onclick="selectPlan('Business')">Contact sales</span>
+                <span class="btn btn-secondary" style="width:100%;justify-content:center" onclick="location.href='checkout.html?plan=Business'">Contact sales</span>
             </div>
         </div>
         <p class="pricing-note">All plans include a 7-day free trial. No credit card required.</p>
@@ -516,6 +507,12 @@ function startTrial() {
     if (email) alert('🎉 Thanks! In production, this would create your account and redirect to onboarding.\n\nDemo email: ' + email);
 }
 function watchDemo() {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:999;display:flex;align-items:center;justify-content:center;cursor:pointer';
+    overlay.innerHTML = '<div style="background:white;border-radius:16px;padding:48px;text-align:center;max-width:500px;margin:24px"><div style="font-size:48px;margin-bottom:16px">▶️</div><h3 style="font-size:24px;font-weight:700;margin-bottom:8px">Product Demo</h3><p style="color:#64748B;margin-bottom:24px">See how Jasper helps marketing teams scale content with AI agents.</p><div style="background:#F0EBFF;border-radius:12px;padding:32px;text-align:center;color:#725BFF;font-weight:600">🎬 Demo video would play here<br><span style="font-size:13px;font-weight:400;color:#94A3B8">In production: embedded YouTube/Vimeo or custom video player</span></div><button style="margin-top:24px;padding:12px 32px;background:#725BFF;color:white;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit">Close</button></div>';
+    overlay.addEventListener('click', (e) => { if(e.target===overlay || e.target.tagName==='BUTTON') overlay.remove(); });
+    document.body.appendChild(overlay);
+}
     alert('▶️ Watch Demo\n\nIn production, this would play an embedded product demo video or open a demo page.');
 }
 function selectPlan(plan) {
