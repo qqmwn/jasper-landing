@@ -1,39 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout — Jasper</title>
+    <title>支付 — Jasper</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         :root{
             --primary:#725BFF;--primary-hover:#5F47E0;--cta:#FF6B35;
             --text-dark:#0F172A;--text-light:#64748B;
-            --bg-light:#F8FAFC;--border:#E2E8F0;--white:#FFFFFF
+            --bg-light:#F8FAFC;--border:#E2E8F0;--white:#FFFFFF;
+            --alipay:#1677FF;--wechat:#07C160
         }
         body{font-family:'Inter',sans-serif;color:var(--text-dark);background:var(--bg-light);min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}
         .container{max-width:1000px;width:100%;display:flex;gap:32px;align-items:flex-start}
-        
-        /* Left - payment form */
+
+        /* Left - payment section */
         .payment-main{flex:1.2;background:var(--white);border-radius:16px;padding:40px;box-shadow:0 2px 12px rgba(0,0,0,0.04)}
         .payment-main h2{font-size:22px;font-weight:700;margin-bottom:4px}
         .payment-main .step{font-size:13px;color:var(--text-light);margin-bottom:28px}
         .form-group{margin-bottom:20px}
-        .form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--text-dark);text-transform:uppercase;letter-spacing:.03em}
+        .form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--text-dark)}
         .form-group input{width:100%;padding:13px 16px;border:1px solid var(--border);border-radius:10px;font-size:15px;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s}
         .form-group input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(114,91,255,0.1)}
-        .form-row{display:flex;gap:16px}
-        .form-row .form-group{flex:1}
-        .card-row{display:flex;gap:12px;align-items:flex-end}
-        .card-row .form-group:first-child{flex:2}
-        .card-icons{display:flex;gap:8px;margin-bottom:20px}
-        .card-icon{width:48px;height:32px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text-light);cursor:pointer;transition:border-color .2s}
-        .card-icon.active{border-color:var(--primary);color:var(--primary)}
-        .btn-submit{width:100%;padding:16px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s;border:none;font-family:inherit;background:var(--primary);color:var(--white);margin-top:8px}
-        .btn-submit:hover{background:var(--primary-hover);transform:translateY(-1px);box-shadow:0 4px 12px rgba(114,91,255,0.3)}
-        .secure-note{text-align:center;font-size:12px;color:var(--text-light);margin-top:16px;display:flex;align-items:center;justify-content:center;gap:6px}
-        
+
+        /* Payment method tabs */
+        .pay-tabs{display:flex;gap:0;margin-bottom:24px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+        .pay-tab{flex:1;padding:14px;text-align:center;font-size:15px;font-weight:600;cursor:pointer;border:none;background:var(--white);color:var(--text-light);transition:all .2s;font-family:inherit;border-right:1px solid var(--border)}
+        .pay-tab:last-child{border-right:none}
+        .pay-tab.active{background:var(--primary);color:var(--white);border-color:var(--primary)}
+        .pay-tab:hover:not(.active){background:var(--bg-light)}
+        .pay-tab .tab-icon{font-size:20px;margin-right:6px;vertical-align:middle}
+
+        /* QR code area */
+        .qr-area{text-align:center;padding:32px 24px;background:var(--bg-light);border-radius:12px;display:none}
+        .qr-area.active{display:block}
+        .qr-area img{width:200px;height:200px;border-radius:12px;border:1px solid var(--border);background:white;object-fit:contain}
+        .qr-area .qr-label{font-size:14px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px}
+        .qr-label.alipay{color:var(--alipay)}
+        .qr-label.wechat{color:var(--wechat)}
+        .qr-hint{font-size:13px;color:var(--text-light);margin-top:16px;line-height:1.6}
+        .qr-hint strong{color:var(--text-dark)}
+
+        .btn-submit{width:100%;padding:14px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s;border:none;font-family:inherit;background:var(--primary);color:var(--white);margin-top:24px}
+        .btn-submit:hover{background:var(--primary-hover)}
+
         /* Right - order summary */
         .order-summary{flex:0.8;background:var(--white);border-radius:16px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,0.04);position:sticky;top:40px}
         .order-summary h3{font-size:18px;font-weight:700;margin-bottom:20px}
@@ -54,150 +66,182 @@
         .features-list li{font-size:13px;color:var(--text-light);padding:3px 0;display:flex;align-items:center;gap:6px}
         .features-list li::before{content:'✓';color:#16A34A;font-weight:700}
 
+        .qr-placeholder{background:white;border:2px dashed var(--border);border-radius:12px;width:200px;height:200px;margin:0 auto;display:flex;align-items:center;justify-content:center;color:var(--text-light);font-size:13px;text-align:center;padding:16px;line-height:1.5}
+
         @media(max-width:768px){
             .container{flex-direction:column-reverse}
             .payment-main{padding:24px}
             .order-summary{position:static}
-            .form-row{flex-direction:column;gap:0}
-            .card-row{flex-direction:column;gap:0}
+            .qr-area img{width:160px;height:160px}
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <!-- Payment form -->
+    <!-- Payment -->
     <div class="payment-main">
-        <h2>Complete your purchase</h2>
-        <p class="step">Step 2 of 2 · Secure checkout</p>
+        <h2>选择支付方式</h2>
+        <p class="step">扫码支付，即时到账</p>
 
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" placeholder="you@company.com" id="email">
+        <div class="pay-tabs">
+            <button class="pay-tab active" onclick="switchPay('alipay', this)">
+                <span class="tab-icon">💙</span> 支付宝
+            </button>
+            <button class="pay-tab" onclick="switchPay('wechat', this)">
+                <span class="tab-icon">🟢</span> 微信支付
+            </button>
         </div>
 
-        <div class="form-group">
-            <label>Card information</label>
-            <div class="card-icons" id="cardIcons">
-                <span class="card-icon active" data-card="visa">VISA</span>
-                <span class="card-icon" data-card="mc">MC</span>
-                <span class="card-icon" data-card="amex">AMEX</span>
+        <!-- 支付宝二维码区域 -->
+        <div class="qr-area active" id="qr-alipay">
+            <div class="qr-label alipay">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#1677FF"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z"/></svg>
+                支付宝扫码支付
             </div>
-            <input type="text" placeholder="1234 5678 9012 3456" id="cardNumber" maxlength="19">
-        </div>
-
-        <div class="form-row card-row">
-            <div class="form-group">
-                <label>Expiry</label>
-                <input type="text" placeholder="MM / YY" id="expiry" maxlength="7">
+            <div class="qr-placeholder" id="alipayQrPlaceholder">
+                <span>📱<br>请放入你的<br>支付宝收款码</span>
             </div>
-            <div class="form-group">
-                <label>CVC</label>
-                <input type="text" placeholder="123" id="cvc" maxlength="4">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Name on card</label>
-            <input type="text" placeholder="John Doe" id="cardName">
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label>Country</label>
-                <input type="text" placeholder="United States" id="country" value="China">
-            </div>
-            <div class="form-group">
-                <label>ZIP / Postal</label>
-                <input type="text" placeholder="100000" id="zip">
+            <div class="qr-hint">
+                1. 打开 <strong>支付宝 App</strong><br>
+                2. 点击「<strong>收付款</strong>」→「<strong>收款</strong>」<br>
+                3. <strong>截图保存收款码</strong><br>
+                4. 替换下方图片地址
             </div>
         </div>
 
-        <button class="btn-submit" onclick="handlePay()">Pay <span id="payAmount">$99.00</span> — Start 7-day trial</button>
-
-        <div class="secure-note">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            Secured by Stripe · Your data is encrypted
+        <!-- 微信支付二维码区域 -->
+        <div class="qr-area" id="qr-wechat">
+            <div class="qr-label wechat">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#07C160"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z"/></svg>
+                微信扫码支付
+            </div>
+            <div class="qr-placeholder" id="wechatQrPlaceholder">
+                <span>📱<br>请放入你的<br>微信收款码</span>
+            </div>
+            <div class="qr-hint">
+                1. 打开 <strong>微信 App</strong><br>
+                2. 点击「<strong>我</strong>」→「<strong>服务</strong>」→「<strong>收付款</strong>」→「<strong>二维码收款</strong>」<br>
+                3. <strong>截图保存收款码</strong><br>
+                4. 替换下方图片地址
+            </div>
         </div>
-
-        <a href="index.html#pricing" class="back-link">← Back to pricing</a>
     </div>
 
     <!-- Order summary -->
-    <div class="order-summary" id="orderSummary">
-        <h3>Order Summary</h3>
-        <div class="trial-note">🎉 7-day free trial included</div>
-        <span class="plan-badge pro">MOST POPULAR</span>
-        <div class="plan-name">Pro Plan</div>
-        <div class="plan-price">$99<span>/month</span></div>
-        <ul class="features-list">
-            <li>5 seats</li>
-            <li>Unlimited templates</li>
-            <li>AI agents & workflows</li>
-            <li>Priority support</li>
-            <li>5 brand voices</li>
-            <li>Analytics dashboard</li>
+    <div class="order-summary">
+        <h3>订单摘要</h3>
+        <div class="trial-note">🎉 含 7 天免费试用</div>
+        <span class="plan-badge pro">最受欢迎</span>
+        <div class="plan-name" id="summaryName">Pro 套餐</div>
+        <div class="plan-price" id="summaryPrice">¥99<span>/月</span></div>
+        <ul class="features-list" id="summaryFeatures">
+            <li>5 个席位</li>
+            <li>无限模板</li>
+            <li>AI 智能代理</li>
+            <li>优先支持</li>
+            <li>5 个品牌声音</li>
+            <li>分析面板</li>
         </ul>
         <div class="summary-divider"></div>
-        <div class="summary-row"><span>Subtotal</span><span>$99.00</span></div>
-        <div class="summary-row"><span>7-day trial discount</span><span style="color:#16A34A">-$99.00</span></div>
+        <div class="summary-row"><span>小计</span><span id="subtotal">¥99.00</span></div>
+        <div class="summary-row"><span>7天试用折扣</span><span style="color:#16A34A" id="discount">-¥99.00</span></div>
         <div class="summary-divider"></div>
-        <div class="summary-total"><span>Due today</span><span>$0.00</span></div>
-        <div class="summary-total" style="font-size:12px;font-weight:400;color:var(--text-light);margin-top:4px"><span>After trial</span><span>$99.00/mo</span></div>
+        <div class="summary-total"><span>今日应付</span><span>¥0.00</span></div>
+        <div class="summary-total" style="font-size:12px;font-weight:400;color:var(--text-light);margin-top:4px"><span>试用期后</span><span id="afterTrial">¥99.00/月</span></div>
+        <a href="index.html#pricing" class="back-link">← 返回定价</a>
     </div>
 </div>
 
 <script>
-// Get plan from URL query
+// Plan data from URL
 const params = new URLSearchParams(window.location.search);
 const plan = params.get('plan') || 'Pro';
 
-const planData = {
-    Creator: { name:'Creator Plan', price:'$49', features:['1 seat','50+ templates','Browser extension','Basic support','1 brand voice'], badge:'creator' },
-    Pro: { name:'Pro Plan', price:'$99', features:['5 seats','Unlimited templates','AI agents & workflows','Priority support','5 brand voices','Analytics dashboard'], badge:'pro' },
-    Business: { name:'Business Plan', price:'Custom', features:['Custom pricing','Contact sales team','Tailored solution'], badge:'business' }
+const plans = {
+    Creator: {
+        name: 'Creator 套餐',
+        price: '¥49',
+        badge: 'creator',
+        badgeText: '入门',
+        features: ['1 个席位','50+ 模板','浏览器扩展','基础支持','1 个品牌声音']
+    },
+    Pro: {
+        name: 'Pro 套餐',
+        price: '¥99',
+        badge: 'pro',
+        badgeText: '最受欢迎',
+        features: ['5 个席位','无限模板','AI 智能代理','优先支持','5 个品牌声音','分析面板']
+    },
+    Business: {
+        name: 'Business 套餐',
+        price: '定制',
+        badge: 'business',
+        badgeText: '企业',
+        features: ['不限席位','定制 AI 模型','SSO & 高级安全','专属支持','不限品牌声音','API 接口','SLA 保障'],
+        isCustom: true
+    }
 };
 
-// Update summary based on plan
-const data = planData[plan] || planData['Pro'];
-document.getElementById('payAmount').textContent = data.price === 'Custom' ? '' : data.price + '.00';
-document.querySelector('.order-summary .plan-name').textContent = data.name;
-document.querySelector('.order-summary .plan-price').innerHTML = data.price + (data.price==='Custom'?'':'<span>/month</span>');
-document.querySelector('.order-summary .plan-badge').className = 'plan-badge ' + data.badge;
-document.querySelector('.order-summary .plan-badge').textContent = plan === 'Pro' ? 'MOST POPULAR' : plan.toUpperCase();
+const data = plans[plan] || plans['Pro'];
 
-// Update features
-const featList = document.querySelector('.features-list');
+// Update summary
+document.getElementById('summaryName').textContent = data.name;
+document.getElementById('summaryPrice').innerHTML = data.price + (data.isCustom ? '' : '<span>/月</span>');
+document.getElementById('subtotal').textContent = data.isCustom ? '联系客服' : data.price + '.00';
+document.getElementById('discount').textContent = data.isCustom ? '' : '-' + data.price + '.00';
+document.getElementById('afterTrial').textContent = data.isCustom ? '联系客服报价' : data.price + '.00/月';
+
+const badge = document.querySelector('.plan-badge');
+badge.className = 'plan-badge ' + data.badge;
+badge.textContent = data.badgeText;
+
+const featList = document.getElementById('summaryFeatures');
 featList.innerHTML = data.features.map(f => '<li>' + f + '</li>').join('');
 
-if (data.price === 'Custom') {
-    document.querySelector('.btn-submit').innerHTML = 'Contact Sales';
-    document.querySelector('.trial-note').textContent = '📋 Our team will reach out within 24 hours';
-    document.querySelectorAll('.summary-row,.summary-total').forEach(el => el.style.display = 'none');
+if (data.isCustom) {
+    document.querySelector('.trial-note').textContent = '📋 销售团队将在 24 小时内联系';
 }
 
-// Card type toggle
-document.querySelectorAll('.card-icon').forEach(icon => {
-    icon.addEventListener('click', () => {
-        document.querySelectorAll('.card-icon').forEach(i => i.classList.remove('active'));
-        icon.classList.add('active');
-    });
-});
-
-function handlePay() {
-    if (data.price === 'Custom') {
-        alert('✅ Request sent!\n\nOur sales team will contact you within 24 hours to discuss a custom Business plan.\n\nDemo: This would create a ticket in our CRM.');
-        window.location.href = 'dashboard.html';
-        return;
-    }
-    const email = document.getElementById('email').value.trim();
-    const card = document.getElementById('cardNumber').value.trim();
-    const name = document.getElementById('cardName').value.trim();
-    if (!email) return alert('Please enter your email.');
-    if (!card) return alert('Please enter your card number.');
-    if (!name) return alert('Please enter the name on card.');
-    alert('✅ Payment successful!\n\nWelcome to Jasper ' + plan + '!\nYour 7-day free trial starts now. You won\'t be charged until the trial ends.\n\nDemo: In production, this would process via Stripe and create your account.\n\nEmail: ' + email);
-    window.location.href = 'dashboard.html';
+// Payment tab switch
+function switchPay(type, btn) {
+    document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.qr-area').forEach(a => a.classList.remove('active'));
+    document.getElementById('qr-' + type).classList.add('active');
 }
+
+// ── QR CODE LOADING ──
+// Replace these paths with your actual QR code images after you save them in the project folder.
+// Just put alipay-qr.png and wechat-qr.png next to this file.
+const ALIPAY_QR = 'alipay-qr.png';
+const WECHAT_QR = 'wechat-qr.png';
+
+function loadQr(type) {
+    const src = type === 'alipay' ? ALIPAY_QR : WECHAT_QR;
+    const placeholderId = type === 'alipay' ? 'alipayQrPlaceholder' : 'wechatQrPlaceholder';
+    const img = new Image();
+    img.onload = function() {
+        const placeholder = document.getElementById(placeholderId);
+        placeholder.innerHTML = '';
+        img.style.width = '200px';
+        img.style.height = '200px';
+        img.style.borderRadius = '12px';
+        img.style.border = '1px solid var(--border)';
+        img.style.objectFit = 'contain';
+        img.style.background = 'white';
+        img.alt = type === 'alipay' ? '支付宝收款码' : '微信收款码';
+        placeholder.appendChild(img);
+    };
+    img.onerror = function() {
+        // QR code not found, keep placeholder instruction
+        console.log(type + ' QR code not found, showing placeholder');
+    };
+    img.src = src;
+}
+
+// Try to load both QR codes
+loadQr('alipay');
+loadQr('wechat');
 </script>
 </body>
 </html>
