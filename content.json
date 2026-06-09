@@ -1,0 +1,79 @@
+{
+  "hero": {
+    "badge": "Introducing AI Agents for Marketing",
+    "title": "Put AI agents to work for marketing",
+    "subtitle": "Orchestrate intelligent agents to run end-to-end marketing workflows—delivering speed, control, and measurable impact.",
+    "ctaPrimary": "Start free trial",
+    "ctaSecondary": "Watch demo"
+  },
+  "features": [
+    {
+      "title": "Canvas",
+      "description": "Plan, create, and collaborate intuitively and at scale.",
+      "icon": "chat"
+    },
+    {
+      "title": "Studio",
+      "description": "Build custom agentic workflows — fast.",
+      "icon": "layers"
+    },
+    {
+      "title": "Jasper IQ",
+      "description": "Maintain brand voice, tone, and messaging across every channel — automatically.",
+      "icon": "chart"
+    },
+    {
+      "title": "Trust & Security",
+      "description": "Enterprise-grade security so your data stays safe, private, and in control.",
+      "icon": "shield"
+    }
+  ],
+  "pricing": [
+    {
+      "name": "Creator",
+      "price": "$49",
+      "period": "/mo",
+      "features": [
+        "1 seat",
+        "50+ templates",
+        "Browser extension",
+        "Basic support",
+        "1 brand voice"
+      ],
+      "featured": false,
+      "cta": "Get started"
+    },
+    {
+      "name": "Pro",
+      "price": "$99",
+      "period": "/mo",
+      "features": [
+        "5 seats",
+        "Unlimited templates",
+        "AI agents & workflows",
+        "Priority support",
+        "5 brand voices",
+        "Analytics dashboard"
+      ],
+      "featured": true,
+      "badge": "Most popular",
+      "cta": "Start free trial"
+    },
+    {
+      "name": "Business",
+      "price": "Custom",
+      "period": "",
+      "features": [
+        "Unlimited seats",
+        "Custom AI models",
+        "SSO & advanced security",
+        "Dedicated support",
+        "Unlimited brand voices",
+        "API access",
+        "SLA guarantee"
+      ],
+      "featured": false,
+      "cta": "Contact sales"
+    }
+  ]
+}

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理 — Jasper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        :root{
+            --primary:#725BFF;--primary-hover:#5F47E0;--danger:#EF4444;--danger-hover:#DC2626;
+            --text-dark:#0F172A;--text-light:#64748B;
+            --bg-light:#F8FAFC;--border:#E2E8F0;--white:#FFFFFF;
+            --sidebar-w:220px
+        }
+        body{font-family:'Inter',sans-serif;color:var(--text-dark);background:var(--bg-light);display:flex;min-height:100vh}
+        
+        .sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);padding:24px 0;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50}
+        .sidebar-logo{font-size:20px;font-weight:700;display:flex;align-items:center;gap:6px;padding:0 20px;margin-bottom:28px;text-decoration:none;color:var(--text-dark)}
+        .sidebar-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--primary)}
+        .sidebar-section{font-size:11px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.05em;padding:16px 20px 8px}
+        .sidebar-nav{flex:1;display:flex;flex-direction:column;gap:2px;padding:0 12px}
+        .sidebar-nav span{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:14px;font-weight:500;color:var(--text-light);cursor:pointer;transition:all .15s}
+        .sidebar-nav span:hover{background:var(--bg-light);color:var(--text-dark)}
+        .sidebar-nav span.active{background:#F0EBFF;color:var(--primary);font-weight:600}
+        .sidebar-nav svg{width:18px;height:18px;flex-shrink:0}
+        .sidebar-user{padding:16px 20px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;margin-top:auto}
+        .sidebar-avatar{width:32px;height:32px;border-radius:50%;background:var(--primary);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+        .sidebar-user-info{font-size:12px;flex:1;min-width:0}
+        .sidebar-user-name{font-weight:600;color:var(--text-dark)}
+        .sidebar-user-email{color:var(--text-light);font-size:11px}
+
+        .main{margin-left:var(--sidebar-w);flex:1;min-width:0}
+        .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between}
+        .topbar-title{font-size:17px;font-weight:600}
+        .topbar-actions{display:flex;align-items:center;gap:12px}
+        .topbar-btn{padding:7px 14px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none;font-family:inherit;background:var(--primary);color:var(--white)}
+        .topbar-btn:hover{background:var(--primary-hover)}
+        .topbar-btn.outline{background:transparent;border:1px solid var(--border);color:var(--text-dark)}
+        .topbar-btn.outline:hover{border-color:var(--text-dark)}
+        .topbar-btn.danger{background:transparent;border:1px solid #FECACA;color:var(--danger)}
+        .topbar-btn.danger:hover{background:#FEF2F2;border-color:var(--danger)}
+        .content{padding:28px 32px}
+
+        /* Stats */
+        .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+        .stat-card{background:var(--white);border-radius:10px;padding:20px 24px;border:1px solid var(--border)}
+        .stat-label{font-size:12px;color:var(--text-light);margin-bottom:6px}
+        .stat-value{font-size:28px;font-weight:700}
+
+        /* Chart */
+        .chart-container{background:var(--white);border-radius:10px;border:1px solid var(--border);padding:24px;margin-bottom:24px}
+        .chart-title{font-size:14px;font-weight:600;margin-bottom:16px}
+        .chart-bars{display:flex;align-items:flex-end;gap:12px;height:160px}
+        .chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+        .chart-bar{width:100%;max-width:48px;border-radius:6px 6px 0 0;background:var(--primary);transition:height .4s ease;min-height:2px}
+        .chart-bar-label{font-size:11px;color:var(--text-light)}
+        .chart-bar-count{font-size:11px;font-weight:600;color:var(--primary)}
+
+        /* Table */
+        .panel{background:var(--white);border-radius:10px;border:1px solid var(--border);overflow:hidden;margin-bottom:24px}
+        .panel-header{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:16px}
+        .panel-header h3{font-size:15px;font-weight:600}
+        .panel-body{padding:24px}
+        .search-input{padding:8px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;outline:none;width:240px;transition:border-color .2s}
+        .search-input:focus{border-color:var(--primary)}
+        table{width:100%;border-collapse:collapse}
+        th,td{text-align:left;padding:12px 16px;font-size:13px}
+        th{font-weight:600;color:var(--text-light);border-bottom:1px solid var(--border);font-size:12px}
+        td{border-bottom:1px solid #F1F5F9}
+        tr:last-child td{border-bottom:none}
+        .role-badge{display:inline-block;padding:2px 8px;border-radius:100px;font-size:11px;font-weight:600}
+        .role-badge.admin{background:#F0EBFF;color:var(--primary)}
+        .role-badge.user{background:var(--bg-light);color:var(--text-light)}
+        .btn-del{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid #FECACA;background:var(--white);color:var(--danger);font-family:inherit;transition:all .15s}
+        .btn-del:hover{background:#FEF2F2}
+        .btn-del:disabled{opacity:0.4;cursor:not-allowed}
+
+        /* Forms */
+        .form-section{margin-bottom:28px}
+        .form-section h4{font-size:14px;font-weight:600;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #F1F5F9}
+        .form-row{display:flex;gap:12px;margin-bottom:12px;align-items:flex-end}
+        .form-row .form-group{flex:1}
+        .form-group{margin-bottom:14px}
+        .form-group label{display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text-dark)}
+        .form-group input,.form-group textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;transition:border-color .2s;resize:vertical}
+        .form-group input:focus,.form-group textarea:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(114,91,255,0.08)}
+        .form-group textarea{min-height:70px}
+        .btn-sm{padding:7px 14px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .15s;background:var(--primary);color:var(--white)}
+        .btn-sm:hover{background:var(--primary-hover)}
+        .btn-sm.outline{background:transparent;border:1px solid var(--border);color:var(--text-dark)}
+        .btn-sm.outline:hover{border-color:var(--text-dark)}
+        .btn-sm.danger-outline{background:transparent;border:1px solid #FECACA;color:var(--danger)}
+        .btn-sm.danger-outline:hover{background:#FEF2F2}
+        .toast{position:fixed;top:20px;right:20px;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:600;z-index:200;animation:slideIn .3s ease;display:none}
+        .toast.success{background:#F0FDF4;color:#16A34A;border:1px solid #BBF7D0;display:block}
+        .toast.error{background:#FEF2F2;color:var(--danger);border:1px solid #FECACA;display:block}
+        @keyframes slideIn{from{transform:translateX(100px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+        .empty-state{text-align:center;padding:48px 24px;color:var(--text-light);font-size:14px}
+
+        /* Dynamic pricing fields */
+        .features-inline{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+        .features-inline input{margin-bottom:4px}
+
+        @media(max-width:768px){
+            .sidebar{display:none}
+            .main{margin-left:0}
+            .stats-row{grid-template-columns:repeat(2,1fr)}
+            .content{padding:20px}
+            .topbar{padding:0 20px}
+            .panel-header{flex-direction:column;align-items:flex-start}
+            .search-input{width:100%}
+        }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <a href="index.html" class="sidebar-logo">Jasper<span class="sidebar-logo-dot"></span></a>
+    <div class="sidebar-section">后台管理</div>
+    <nav class="sidebar-nav">
+        <span class="active" data-page="stats" onclick="switchPage('stats')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            数据概览
+        </span>
+        <span data-page="users" onclick="switchPage('users')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            用户管理
+        </span>
+        <span data-page="content" onclick="switchPage('content')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            内容管理
+        </span>
+    </nav>
+    <div style="padding:0 12px;margin-top:auto">
+        <span data-page="stats" onclick="location.href='index.html'" style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:14px;color:var(--text-light);cursor:pointer;transition:all .15s">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            返回前台
+        </span>
+        <span onclick="handleLogout()" style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:14px;color:#EF4444;cursor:pointer;transition:all .15s">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            退出登录
+        </span>
+    </div>
+    <div class="sidebar-user" style="border-top:1px solid var(--border);margin-top:12px">
+        <div class="sidebar-avatar" id="adminAvatar">管</div>
+        <div class="sidebar-user-info">
+            <div class="sidebar-user-name" id="adminName">管理员</div>
+            <div class="sidebar-user-email" id="adminEmail"></div>
+        </div>
+    </div>
+</aside>
+
+<div class="main">
+    <div class="topbar">
+        <span class="topbar-title" id="pageTitle">数据概览</span>
+        <div class="topbar-actions">
+            <button class="topbar-btn outline" onclick="location.href='index.html'">查看前台</button>
+            <button class="topbar-btn danger" onclick="handleLogout()">退出</button>
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- Toast -->
+        <div class="toast" id="toast"></div>
+
+        <!-- Page: Stats -->
+        <div id="page-stats">
+            <div class="stats-row" id="statsCards"><!-- dynamic --></div>
+            <div class="chart-container">
+                <div class="chart-title">近 7 天注册趋势</div>
+                <div class="chart-bars" id="chartBars"><!-- dynamic --></div>
+            </div>
+        </div>
+
+        <!-- Page: Users -->
+        <div id="page-users" style="display:none">
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>用户列表</h3>
+                    <input type="text" class="search-input" id="userSearch" placeholder="搜索姓名或邮箱..." oninput="searchUsers()">
+                </div>
+                <div class="panel-body" style="overflow-x:auto">
+                    <table>
+                        <thead><tr><th>姓名</th><th>邮箱</th><th>角色</th><th>注册时间</th><th>操作</th></tr></thead>
+                        <tbody id="userTableBody"><tr><td colspan="5" class="empty-state">加载中...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Content -->
+        <div id="page-content" style="display:none">
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>落地页内容编辑</h3>
+                    <div style="display:flex;gap:8px">
+                        <button class="btn-sm" onclick="saveContent()">保存修改</button>
+                        <button class="btn-sm danger-outline" onclick="resetContent()">恢复默认</button>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="form-section">
+                        <h4>Hero 区域</h4>
+                        <div class="form-group"><label>标签文字</label><input id="edit-hero-badge"></div>
+                        <div class="form-group"><label>主标题</label><input id="edit-hero-title"></div>
+                        <div class="form-group"><label>副标题</label><textarea id="edit-hero-subtitle"></textarea></div>
+                        <div class="form-row">
+                            <div class="form-group"><label>主按钮文字</label><input id="edit-hero-ctaPrimary"></div>
+                            <div class="form-group"><label>次按钮文字</label><input id="edit-hero-ctaSecondary"></div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h4>功能卡片</h4>
+                        <div id="featuresEditor"><!-- dynamic --></div>
+                    </div>
+                    <div class="form-section">
+                        <h4>定价方案</h4>
+                        <div id="pricingEditor"><!-- dynamic --></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const API = '';
+let currentPage = 'stats';
+let allUsers = [];
+let currentContent = null;
+
+// ── Auth ──
+async function checkAdmin() {
+    const token = localStorage.getItem('token');
+    if (!token) { window.location.href = 'signin.html'; return; }
+    try {
+        const res = await fetch(API + '/api/me', { headers: { 'Authorization': 'Bearer ' + token } });
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        if (data.user.role !== 'admin') { window.location.href = 'dashboard.html'; return; }
+        document.getElementById('adminName').textContent = data.user.name;
+        document.getElementById('adminEmail').textContent = data.user.email;
+        document.getElementById('adminAvatar').textContent = data.user.name.charAt(0);
+    } catch {
+        localStorage.removeItem('token'); localStorage.removeItem('user');
+        window.location.href = 'signin.html';
+    }
+}
+
+function handleLogout() {
+    localStorage.removeItem('token'); localStorage.removeItem('user');
+    window.location.href = 'signin.html';
+}
+
+function getHeaders() {
+    return { 'Authorization': 'Bearer ' + localStorage.getItem('token'), 'Content-Type': 'application/json' };
+}
+
+// ── Toast ──
+function toast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.className = 'toast ' + type;
+    clearTimeout(t._t); t._t = setTimeout(() => t.className = 'toast', 2500);
+}
+
+// ── Page switching ──
+function switchPage(page) {
+    currentPage = page;
+    document.querySelectorAll('.sidebar-nav span').forEach(s => s.classList.toggle('active', s.dataset.page === page));
+    document.getElementById('page-stats').style.display = page === 'stats' ? 'block' : 'none';
+    document.getElementById('page-users').style.display = page === 'users' ? 'block' : 'none';
+    document.getElementById('page-content').style.display = page === 'content' ? 'block' : 'none';
+    document.getElementById('pageTitle').textContent = { stats: '数据概览', users: '用户管理', content: '内容管理' }[page];
+    if (page === 'stats') loadStats();
+    if (page === 'users') loadUsers();
+    if (page === 'content') loadContentForm();
+}
+
+// ── Stats ──
+async function loadStats() {
+    try {
+        const res = await fetch(API + '/api/admin/stats', { headers: getHeaders() });
+        const data = await res.json();
+        document.getElementById('statsCards').innerHTML =
+            '<div class="stat-card"><div class="stat-label">总注册用户</div><div class="stat-value">' + data.total + '</div></div>' +
+            '<div class="stat-card"><div class="stat-label">今日新增</div><div class="stat-value">' + data.todayNew + '</div></div>' +
+            '<div class="stat-card"><div class="stat-label">本周新增</div><div class="stat-value">' + data.weekNew + '</div></div>' +
+            '<div class="stat-card"><div class="stat-label">普通用户</div><div class="stat-value">' + data.regularUsers + '</div></div>';
+        const max = Math.max(1, ...data.dailyData.map(d => d.count));
+        document.getElementById('chartBars').innerHTML = data.dailyData.map(d => {
+            const h = Math.max(2, Math.round((d.count / max) * 150));
+            const label = d.date.slice(5);
+            return '<div class="chart-bar-wrap"><div class="chart-bar-count">' + d.count + '</div><div class="chart-bar" style="height:' + h + 'px"></div><div class="chart-bar-label">' + label + '</div></div>';
+        }).join('');
+    } catch (err) {
+        toast('加载数据失败', 'error');
+    }
+}
+
+// ── Users ──
+async function loadUsers(search) {
+    try {
+        let url = API + '/api/admin/users';
+        if (search) url += '?search=' + encodeURIComponent(search);
+        const res = await fetch(url, { headers: getHeaders() });
+        const data = await res.json();
+        allUsers = data.users;
+        renderUserTable(allUsers);
+    } catch { toast('加载用户列表失败', 'error'); }
+}
+
+function renderUserTable(users) {
+    const tbody = document.getElementById('userTableBody');
+    if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">暂无用户</td></tr>';
+        return;
+    }
+    const me = JSON.parse(localStorage.getItem('user') || '{}');
+    tbody.innerHTML = users.map(u =>
+        '<tr>' +
+            '<td style="font-weight:500">' + u.name + '</td>' +
+            '<td>' + u.email + '</td>' +
+            '<td><span class="role-badge ' + u.role + '">' + (u.role === 'admin' ? '管理员' : '用户') + '</span></td>' +
+            '<td style="color:var(--text-light)">' + new Date(u.createdAt).toLocaleDateString('zh-CN') + '</td>' +
+            '<td><button class="btn-del" ' + (u.email === me.email ? 'disabled title="不能删除自己"' : 'onclick="deleteUser(\'' + u.id + '\',\'' + u.name + '\')"') + '>删除</button></td>' +
+        '</tr>'
+    ).join('');
+}
+
+function searchUsers() {
+    const q = document.getElementById('userSearch').value;
+    loadUsers(q);
+}
+
+async function deleteUser(id, name) {
+    if (!confirm('确定要删除用户「' + name + '」吗？此操作不可撤销。')) return;
+    try {
+        const res = await fetch(API + '/api/admin/users/' + id, { method: 'DELETE', headers: getHeaders() });
+        if (!res.ok) { const d = await res.json(); toast(d.error || '删除失败', 'error'); return; }
+        toast('已删除用户「' + name + '」', 'success');
+        loadUsers(document.getElementById('userSearch')?.value || '');
+    } catch { toast('删除失败', 'error'); }
+}
+
+// ── Content ──
+async function loadContentForm() {
+    try {
+        const res = await fetch(API + '/api/content');
+        currentContent = await res.json();
+        populateContentForm(currentContent);
+    } catch { toast('加载内容失败', 'error'); }
+}
+
+function populateContentForm(c) {
+    document.getElementById('edit-hero-badge').value = c.hero.badge || '';
+    document.getElementById('edit-hero-title').value = c.hero.title || '';
+    document.getElementById('edit-hero-subtitle').value = c.hero.subtitle || '';
+    document.getElementById('edit-hero-ctaPrimary').value = c.hero.ctaPrimary || '';
+    document.getElementById('edit-hero-ctaSecondary').value = c.hero.ctaSecondary || '';
+
+    const fe = document.getElementById('featuresEditor');
+    fe.innerHTML = (c.features || []).map((f, i) =>
+        '<div class="form-row"><div class="form-group"><label>标题</label><input value="' + f.title + '" data-fidx="' + i + '" data-fkey="title"></div><div class="form-group"><label>描述</label><input value="' + (f.description || '') + '" data-fidx="' + i + '" data-fkey="description"></div></div>'
+    ).join('');
+
+    const pe = document.getElementById('pricingEditor');
+    pe.innerHTML = (c.pricing || []).map((p, i) => {
+        const featuresStr = (p.features || []).join(', ');
+        return '<div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #F1F5F9">' +
+            '<div class="form-row">' +
+                '<div class="form-group"><label>方案名</label><input value="' + p.name + '" data-pidx="' + i + '" data-pkey="name"></div>' +
+                '<div class="form-group"><label>价格</label><input value="' + p.price + '" data-pidx="' + i + '" data-pkey="price"></div>' +
+                '<div class="form-group"><label>周期</label><input value="' + (p.period || '') + '" data-pidx="' + i + '" data-pkey="period"></div>' +
+            '</div>' +
+            '<div class="form-group"><label>按钮文字</label><input value="' + (p.cta || '') + '" data-pidx="' + i + '" data-pkey="cta"></div>' +
+            '<div class="form-group"><label>功能列表（逗号分隔）</label><input value="' + featuresStr + '" data-pidx="' + i + '" data-pkey="features"></div>' +
+        '</div>';
+    }).join('');
+}
+
+async function saveContent() {
+    if (!currentContent) return;
+    // Read hero fields
+    currentContent.hero.badge = document.getElementById('edit-hero-badge').value;
+    currentContent.hero.title = document.getElementById('edit-hero-title').value;
+    currentContent.hero.subtitle = document.getElementById('edit-hero-subtitle').value;
+    currentContent.hero.ctaPrimary = document.getElementById('edit-hero-ctaPrimary').value;
+    currentContent.hero.ctaSecondary = document.getElementById('edit-hero-ctaSecondary').value;
+
+    // Read features
+    document.querySelectorAll('[data-fidx]').forEach(el => {
+        const idx = parseInt(el.dataset.fidx);
+        const key = el.dataset.fkey;
+        if (currentContent.features[idx]) currentContent.features[idx][key] = el.value;
+    });
+
+    // Read pricing
+    document.querySelectorAll('[data-pidx]').forEach(el => {
+        const idx = parseInt(el.dataset.pidx);
+        const key = el.dataset.pkey;
+        if (currentContent.pricing[idx]) {
+            if (key === 'features') {
+                currentContent.pricing[idx].features = el.value.split(',').map(s => s.trim()).filter(Boolean);
+            } else {
+                currentContent.pricing[idx][key] = el.value;
+            }
+        }
+    });
+
+    try {
+        const res = await fetch(API + '/api/content', {
+            method: 'PUT',
+            headers: getHeaders(),
+            body: JSON.stringify(currentContent)
+        });
+        if (!res.ok) throw new Error();
+        toast('内容已保存，前台页面刷新后生效', 'success');
+    } catch { toast('保存失败', 'error'); }
+}
+
+async function resetContent() {
+    if (!confirm('确定要恢复默认内容吗？当前编辑的内容将丢失。')) return;
+    try {
+        const res = await fetch(API + '/api/content', {
+            method: 'PUT',
+            headers: getHeaders(),
+            body: JSON.stringify({
+                hero: { badge: 'Introducing AI Agents for Marketing', title: 'Put AI agents to work for marketing', subtitle: 'Orchestrate intelligent agents to run end-to-end marketing workflows\u2014delivering speed, control, and measurable impact.', ctaPrimary: 'Start free trial', ctaSecondary: 'Watch demo' },
+                features: [{ title: 'Canvas', description: 'Plan, create, and collaborate intuitively and at scale.', icon: 'chat' }, { title: 'Studio', description: 'Build custom agentic workflows \u2014 fast.', icon: 'layers' }, { title: 'Jasper IQ', description: 'Maintain brand voice, tone, and messaging across every channel \u2014 automatically.', icon: 'chart' }, { title: 'Trust & Security', description: 'Enterprise-grade security so your data stays safe, private, and in control.', icon: 'shield' }],
+                pricing: [
+                    { name: 'Creator', price: '$49', period: '/mo', features: ['1 seat', '50+ templates', 'Browser extension', 'Basic support', '1 brand voice'], featured: false, cta: 'Get started' },
+                    { name: 'Pro', price: '$99', period: '/mo', features: ['5 seats', 'Unlimited templates', 'AI agents & workflows', 'Priority support', '5 brand voices', 'Analytics dashboard'], featured: true, badge: 'Most popular', cta: 'Start free trial' },
+                    { name: 'Business', price: 'Custom', period: '', features: ['Unlimited seats', 'Custom AI models', 'SSO & advanced security', 'Dedicated support', 'Unlimited brand voices', 'API access', 'SLA guarantee'], featured: false, cta: 'Contact sales' }
+                ]
+            })
+        });
+        if (!res.ok) throw new Error();
+        toast('已恢复默认内容', 'success');
+        loadContentForm();
+    } catch { toast('恢复失败', 'error'); }
+}
+
+// ── Init ──
+checkAdmin().then(() => loadStats());
+</script>
+</body>
+</html>

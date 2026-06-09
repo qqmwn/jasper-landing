@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>账户设置 — Jasper</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#725BFF;--primary-hover:#5F47E0;--danger:#EF4444;--text-dark:#0F172A;--text-light:#64748B;--bg-light:#F8FAFC;--border:#E2E8F0;--white:#FFFFFF;--success:#22C55E}
+body{font-family:'Inter',sans-serif;color:var(--text-dark);background:var(--bg-light);min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}
+.container{max-width:640px;width:100%}
+h1{font-size:24px;font-weight:700;margin-bottom:4px}
+.sub{color:var(--text-light);font-size:14px;margin-bottom:32px}
+.panel{background:var(--white);border-radius:14px;padding:28px 32px;border:1px solid var(--border);margin-bottom:20px}
+.panel h2{font-size:16px;font-weight:600;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid #F1F5F9}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+.form-group input{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s}
+.form-group input:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(114,91,255,0.08)}
+.form-group .hint{font-size:12px;color:var(--text-light);margin-top:4px}
+.btn{padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .15s}
+.btn-primary{background:var(--primary);color:var(--white)}
+.btn-primary:hover{background:var(--primary-hover)}
+.btn-primary:disabled{opacity:0.6;cursor:not-allowed}
+.btn-danger{background:transparent;border:1px solid #FECACA;color:var(--danger)}
+.btn-danger:hover{background:#FEF2F2}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-dark)}
+.btn-outline:hover{border-color:var(--text-dark)}
+.msg{display:none;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;margin-bottom:16px}
+.msg.error{display:block;background:#FEF2F2;color:var(--danger);border:1px solid #FECACA}
+.msg.success{display:block;background:#F0FDF4;color:var(--success);border:1px solid #BBF7D0}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--text-light);text-decoration:none;font-size:14px;margin-bottom:24px;transition:color .2s}
+.back-link:hover{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="container">
+    <a href="dashboard.html" class="back-link">← 返回控制台</a>
+    <h1>账户设置</h1>
+    <p class="sub" id="userEmail"><!-- filled by JS --></p>
+
+    <!-- Name -->
+    <div class="panel">
+        <h2>修改姓名</h2>
+        <div class="msg" id="nameMsg"></div>
+        <div class="form-group">
+            <label>姓名</label>
+            <input type="text" id="editName" placeholder="你的姓名">
+        </div>
+        <button class="btn btn-primary" id="nameBtn" onclick="updateName()">保存</button>
+    </div>
+
+    <!-- Password -->
+    <div class="panel">
+        <h2>修改密码</h2>
+        <div class="msg" id="pwMsg"></div>
+        <div class="form-group"><label>当前密码</label><input type="password" id="currentPw" placeholder="输入当前密码"></div>
+        <div class="form-group"><label>新密码</label><input type="password" id="newPw" placeholder="至少8位"><span class="hint">至少8位，不能纯数字或纯字母</span></div>
+        <button class="btn btn-primary" id="pwBtn" onclick="updatePassword()">修改密码</button>
+    </div>
+
+    <!-- Delete -->
+    <div class="panel">
+        <h2>删除账户</h2>
+        <p style="font-size:13px;color:var(--text-light);margin-bottom:16px">此操作不可撤销，所有数据将被永久删除。</p>
+        <button class="btn btn-danger" onclick="deleteAccount()">删除我的账户</button>
+    </div>
+</div>
+
+<script>
+const API='';
+let token='';
+
+async function checkAuth(){
+    token=localStorage.getItem('token');
+    if(!token){location.href='signin.html';return}
+    try{
+        const r=await fetch(API+'/api/me',{headers:{'Authorization':'Bearer '+token}});
+        if(!r.ok)throw new Error();
+        const d=await r.json();
+        document.getElementById('editName').value=d.user.name;
+        document.getElementById('userEmail').textContent=d.user.email;
+    }catch{localStorage.clear();location.href='signin.html'}
+}
+
+function h(id,t,c){const e=document.getElementById(id);e.textContent=t;e.className='msg '+c}
+
+async function updateName(){
+    const name=document.getElementById('editName').value.trim();
+    if(!name)return h('nameMsg','姓名不能为空','error');
+    const btn=document.getElementById('nameBtn');btn.disabled=true;btn.textContent='保存中...';
+    try{
+        const r=await fetch(API+'/api/me',{method:'PUT',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({name})});
+        const d=await r.json();
+        if(!r.ok){h('nameMsg',d.error,'error');btn.disabled=false;btn.textContent='保存';return}
+        localStorage.setItem('token',d.token);localStorage.setItem('user',JSON.stringify(d.user));
+        token=d.token;
+        h('nameMsg','姓名已更新','success');btn.disabled=false;btn.textContent='保存';
+    }catch{h('nameMsg','网络错误','error');btn.disabled=false;btn.textContent='保存'}
+}
+
+async function updatePassword(){
+    const cp=document.getElementById('currentPw').value;
+    const np=document.getElementById('newPw').value;
+    if(!cp||!np)return h('pwMsg','请填写所有字段','error');
+    if(np.length<8)return h('pwMsg','新密码至少8位','error');
+    const btn=document.getElementById('pwBtn');btn.disabled=true;btn.textContent='修改中...';
+    try{
+        const r=await fetch(API+'/api/me/password',{method:'PUT',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({currentPassword:cp,newPassword:np})});
+        const d=await r.json();
+        if(!r.ok){h('pwMsg',d.error,'error');btn.disabled=false;btn.textContent='修改密码';return}
+        h('pwMsg','密码已修改','success');
+        document.getElementById('currentPw').value='';document.getElementById('newPw').value='';
+        btn.disabled=false;btn.textContent='修改密码';
+    }catch{h('pwMsg','网络错误','error');btn.disabled=false;btn.textContent='修改密码'}
+}
+
+async function deleteAccount(){
+    if(!confirm('确定要删除你的账户吗？此操作不可撤销。'))return;
+    if(!confirm('再次确认：所有数据将被永久删除。'))return;
+    try{
+        const r=await fetch(API+'/api/me',{method:'DELETE',headers:{'Authorization':'Bearer '+token}});
+        const d=await r.json();
+        if(!r.ok){alert(d.error);return}
+        localStorage.clear();
+        alert('账户已删除');
+        location.href='index.html';
+    }catch{alert('网络错误')}
+}
+
+checkAuth();
+</script>
+</body>
+</html>
