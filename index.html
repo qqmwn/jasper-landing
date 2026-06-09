@@ -13,12 +13,11 @@
         }
         body{font-family:'Inter',sans-serif;color:var(--text-dark);line-height:1.6;overflow-x:hidden}
         .container{max-width:1200px;margin:0 auto;padding:0 24px}
-
-        /* Typography */
         h1{font-size:64px;font-weight:700;line-height:1.1;letter-spacing:-0.02em}
         h2{font-size:48px;font-weight:700;line-height:1.2}
         h3{font-size:36px;font-weight:700;line-height:1.3}
         h4{font-size:24px;font-weight:700;line-height:1.4}
+        html{scroll-behavior:smooth}
 
         /* Nav */
         nav{position:sticky;top:0;background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100}
@@ -26,11 +25,19 @@
         .nav-logo{font-size:24px;font-weight:700;display:flex;align-items:center;gap:6px;text-decoration:none;color:var(--text-dark)}
         .nav-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--primary)}
         .nav-links{display:flex;gap:32px;list-style:none}
-        .nav-links a{text-decoration:none;color:var(--text-light);font-size:15px;transition:color .2s}
+        .nav-links a{text-decoration:none;color:var(--text-light);font-size:15px;transition:color .2s;cursor:pointer}
         .nav-links a:hover{color:var(--text-dark)}
         .nav-actions{display:flex;align-items:center;gap:16px}
-        .nav-actions>a{text-decoration:none;color:var(--text-light);font-size:15px}
-        .nav-hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px}
+        .nav-actions>a,.nav-actions>span{text-decoration:none;color:var(--text-light);font-size:15px;cursor:pointer}
+        .nav-hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px;font-size:22px;color:var(--text-dark)}
+        .nav-mobile{display:none;flex-direction:column;gap:12px;padding:0 24px 24px;background:var(--white);border-bottom:1px solid var(--border)}
+        .nav-mobile.open{display:flex}
+        .nav-mobile a,.nav-mobile span{text-decoration:none;color:var(--text-light);font-size:15px;cursor:pointer;padding:4px 0}
+        /* Back to top */
+        .back-to-top{position:fixed;bottom:32px;right:32px;width:48px;height:48px;border-radius:50%;background:var(--primary);color:var(--white);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(114,91,255,0.35);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s,transform .2s;z-index:90}
+        .back-to-top.visible{opacity:1;visibility:visible}
+        .back-to-top:hover{transform:translateY(-2px);background:var(--primary-hover)}
+        .back-to-top svg{width:20px;height:20px}
         @media(max-width:768px){.nav-links,.nav-actions{display:none}.nav-hamburger{display:block}}
 
         /* Buttons */
@@ -65,7 +72,7 @@
         .mockup-bubble .icon-sparkle{color:var(--primary);width:16px;height:16px}
         @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
         .logo-wall{display:flex;align-items:center;gap:32px;justify-content:center;padding-top:40px;flex-wrap:wrap}
-        .logo-wall span{color:var(--text-light);font-size:14px;font-weight:600;opacity:.5}
+        .logo-wall span{color:var(--text-light);font-size:14px;font-weight:600;opacity:.5;cursor:default}
 
         /* Sections */
         section{padding:80px 0}
@@ -73,7 +80,7 @@
         .section-heading{text-align:center;margin-bottom:56px}
         .section-heading h3,.section-heading h2{margin-bottom:0}
 
-        /* Cards */
+        /* Feature Cards */
         .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
         .feature-card{background:var(--white);border-radius:16px;padding:32px 24px;box-shadow:0 4px 12px rgba(0,0,0,0.06);transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;gap:16px}
         .feature-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,0.1)}
@@ -81,7 +88,7 @@
         .feature-icon svg{width:20px;height:20px}
         .feature-card h4{font-size:20px}
         .feature-card p{color:var(--text-light);font-size:15px}
-        .feature-link{color:var(--primary);font-size:14px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:auto}
+        .feature-link{color:var(--primary);font-size:14px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:auto;cursor:pointer;background:none;border:none}
         .feature-link:hover{text-decoration:underline}
 
         /* 3-col */
@@ -102,7 +109,7 @@
         .alt-text{flex:1}
         .alt-text h3{margin-bottom:16px}
         .alt-text p{color:var(--text-light);font-size:17px;margin-bottom:20px}
-        .alt-link{color:var(--primary);font-weight:600;text-decoration:none;font-size:15px;display:inline-flex;align-items:center;gap:4px}
+        .alt-link{color:var(--primary);font-weight:600;text-decoration:none;font-size:15px;display:inline-flex;align-items:center;gap:4px;cursor:pointer}
         .alt-link:hover{text-decoration:underline}
         .alt-image{flex:1;background:linear-gradient(135deg,#f0ebff,#e8f0fe);border-radius:16px;min-height:280px;display:flex;align-items:center;justify-content:center}
         .alt-image svg{width:64px;height:64px;color:rgba(114,91,255,0.3)}
@@ -129,9 +136,14 @@
 
         /* FAQ */
         .faq-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
-        .faq-item{padding:24px;border-radius:12px;border:1px solid var(--border)}
-        .faq-q{font-weight:600;margin-bottom:8px}
-        .faq-a{color:var(--text-light);font-size:15px}
+        .faq-item{padding:24px;border-radius:12px;border:1px solid var(--border);cursor:pointer;transition:border-color .2s,box-shadow .2s;user-select:none}
+        .faq-item:hover{border-color:var(--primary);box-shadow:0 2px 8px rgba(114,91,255,0.1)}
+        .faq-item.open{border-color:var(--primary);background:#FAFAFF}
+        .faq-q{font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:8px}
+        .faq-q::after{content:'+';font-size:20px;color:var(--primary);transition:transform .2s;flex-shrink:0}
+        .faq-item.open .faq-q::after{content:'−'}
+        .faq-a{color:var(--text-light);font-size:15px;max-height:0;overflow:hidden;transition:max-height .3s ease,margin-top .3s ease}
+        .faq-item.open .faq-a{max-height:200px;margin-top:12px}
 
         /* Footer */
         footer{background:var(--text-dark);color:var(--white);padding:60px 0 32px}
@@ -141,23 +153,27 @@
         .footer-col h4{color:var(--white);font-size:14px;margin-bottom:16px;font-weight:600}
         .footer-col ul{list-style:none}
         .footer-col li{margin-bottom:10px}
-        .footer-col a{color:#94A3B8;text-decoration:none;font-size:14px;transition:color .2s}
-        .footer-col a:hover{color:var(--white)}
+        .footer-col a,.footer-col span{color:#94A3B8;text-decoration:none;font-size:14px;transition:color .2s;cursor:pointer}
+        .footer-col a:hover,.footer-col span:hover{color:var(--white)}
         .footer-bottom{border-top:1px solid #1E293B;margin-top:40px;padding-top:24px;display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#94A3B8}
         .footer-social{display:flex;gap:16px}
-        .footer-social a{color:#94A3B8;transition:color .2s;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:#1E293B;border-radius:8px}
+        .footer-social a{color:#94A3B8;transition:color .2s,background .2s;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:#1E293B;border-radius:8px;cursor:pointer;text-decoration:none}
         .footer-social a:hover{color:var(--white);background:#334155}
-        .footer-social svg{width:16px;height:16px}
 
-        /* SVG icons inline */
         .svg-icon{display:inline-flex;vertical-align:middle;flex-shrink:0}
 
         /* Mobile */
+        /* Back to top */
+        .back-to-top{position:fixed;bottom:32px;right:32px;width:48px;height:48px;border-radius:50%;background:var(--primary);color:var(--white);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(114,91,255,0.35);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s,transform .2s;z-index:90}
+        .back-to-top.visible{opacity:1;visibility:visible}
+        .back-to-top:hover{transform:translateY(-2px);background:var(--primary-hover)}
+        .back-to-top svg{width:20px;height:20px}
         @media(max-width:768px){
             h1{font-size:40px}h2{font-size:32px}h3{font-size:28px}
             .hero .container{flex-direction:column-reverse;gap:32px}
             .hero{padding:40px 0}
             .hero-btns{flex-direction:column}
+            .mockup-bubble{right:16px;font-size:12px;padding:10px 14px}
             .grid-4{grid-template-columns:repeat(2,1fr)}
             .grid-3{grid-template-columns:1fr}
             .stats{grid-template-columns:repeat(2,1fr)}
@@ -169,7 +185,6 @@
             footer .container{grid-template-columns:1fr 1fr;gap:32px}
             .footer-brand{grid-column:span 2}
             .logo-wall{gap:20px}
-            .mockup-bubble{right:16px;font-size:12px;padding:10px 14px}
         }
     </style>
 </head>
@@ -178,18 +193,26 @@
 <!-- Nav -->
 <nav>
     <div class="container">
-        <a href="#" class="nav-logo">Jasper<span class="nav-logo-dot"></span></a>
+        <a href="#" class="nav-logo" onclick="scrollToTop(event)">Jasper<span class="nav-logo-dot"></span></a>
         <ul class="nav-links">
-            <li><a href="#platform">Product</a></li>
-            <li><a href="#solutions">Solutions</a></li>
-            <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#faq">Resources</a></li>
+            <li><a onclick="scrollToSection('platform',event)">Product</a></li>
+            <li><a onclick="scrollToSection('solutions',event)">Solutions</a></li>
+            <li><a onclick="scrollToSection('pricing',event)">Pricing</a></li>
+            <li><a onclick="scrollToSection('faq',event)">Resources</a></li>
         </ul>
         <div class="nav-actions">
-            <a href="#">Sign in</a>
-            <a href="#" class="btn btn-primary btn-sm" onclick="alert('Demo: 注册功能')">Get started</a>
+            <span onclick="location.href='signin.html'">Sign in</span>
+            <span class="btn btn-primary btn-sm" onclick="location.href='signup.html'">Get started</span>
         </div>
-        <button class="nav-hamburger" aria-label="Menu">☰</button>
+        <button class="nav-hamburger" aria-label="Menu" onclick="toggleMobileMenu()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    </div>
+    <div class="nav-mobile" id="mobileMenu">
+        <a onclick="scrollToSection('platform',event);closeMobileMenu()">Product</a>
+        <a onclick="scrollToSection('solutions',event);closeMobileMenu()">Solutions</a>
+        <a onclick="scrollToSection('pricing',event);closeMobileMenu()">Pricing</a>
+        <a onclick="scrollToSection('faq',event);closeMobileMenu()">Resources</a>
+        <span onclick="demoSignIn();closeMobileMenu()">Sign in</span>
+        <span class="btn btn-primary btn-sm" style="width:100%;justify-content:center" onclick="location.href='signup.html';closeMobileMenu()">Get started</span>
     </div>
 </nav>
 
@@ -197,7 +220,7 @@
 <section class="hero">
     <div class="container">
         <div class="hero-left">
-            <div class="badge">
+            <div class="badge" onclick="demoAlert('AI Agents','Learn how AI agents can automate your marketing workflows.')">
                 Introducing AI Agents for Marketing
                 <span class="badge-arrow">
                     <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -206,11 +229,11 @@
             <h1>Put AI agents to work for marketing</h1>
             <p class="hero-subtitle">Orchestrate intelligent agents to run end-to-end marketing workflows—delivering speed, control, and measurable impact.</p>
             <div class="hero-btns">
-                <a href="#" class="btn btn-cta btn-lg" onclick="startTrial()">Start free trial</a>
-                <a href="#" class="btn btn-secondary btn-lg" onclick="watchDemo()">
+                <span class="btn btn-cta btn-lg" onclick="location.href='signup.html'">Start free trial</span>
+                <span class="btn btn-secondary btn-lg" onclick="watchDemo()">
                     <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                     Watch demo
-                </a>
+                </span>
             </div>
             <div class="logo-wall">
                 <span>NOTION</span><span>AIRBNB</span><span>HUBSPOT</span><span>SHOPIFY</span><span>SLACK</span><span>ZOOM</span>
@@ -245,25 +268,25 @@
                 <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
                 <h4>Canvas</h4>
                 <p>Plan, create, and collaborate intuitively and at scale.</p>
-                <a href="#" class="feature-link">Explore <span class="badge-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a>
+                <span class="feature-link" onclick="scrollToSection('solutions')">Explore <span class="badge-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
             </div>
             <div class="feature-card">
                 <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
                 <h4>Studio</h4>
                 <p>Build custom agentic workflows — fast.</p>
-                <a href="#" class="feature-link">Explore <span class="badge-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a>
+                <span class="feature-link" onclick="location.href='signup.html'">Explore <span class="badge-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
             </div>
             <div class="feature-card">
                 <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/></svg></div>
                 <h4>Jasper IQ</h4>
                 <p>Maintain quality with a rich context hub.</p>
-                <a href="#" class="feature-link">Explore <span class="badge-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a>
+                <span class="feature-link" onclick="demoAlert('Jasper IQ','AI-powered brand intelligence that learns your voice, tone, and style.')">Explore <span class="badge-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
             </div>
             <div class="feature-card">
                 <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
                 <h4>Trust</h4>
                 <p>Stay safe, on-brand, and in control.</p>
-                <a href="#" class="feature-link">Explore <span class="badge-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a>
+                <span class="feature-link" onclick="demoAlert('Trust & Security','SOC 2 compliant, enterprise-grade encryption, and regular third-party security audits.')">Explore <span class="badge-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
             </div>
         </div>
     </div>
@@ -300,7 +323,7 @@
             <div class="alt-text">
                 <h3>Content Pipelines</h3>
                 <p>Connect your data, strategy, and creative process into an automated system that delivers on-brand assets — from idea to publication — without the busywork.</p>
-                <a href="#" class="alt-link">Learn more →</a>
+                <span class="alt-link" onclick="demoAlert('Content Pipelines','Automate your entire content lifecycle from ideation to publishing with AI-powered pipelines.')">Learn more →</span>
             </div>
             <div class="alt-image">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
@@ -310,7 +333,7 @@
             <div class="alt-text">
                 <h3>Agents for every channel</h3>
                 <p>From SEO and personalization to global campaigns and ecommerce, Jasper helps teams launch more — and better — content, faster.</p>
-                <a href="#" class="alt-link">Explore agents →</a>
+                <span class="alt-link" onclick="demoAlert('Channel Agents','Deploy specialized AI agents for SEO, social media, email, ads, and more — all from one platform.')">Explore agents →</span>
             </div>
             <div class="alt-image">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
@@ -320,7 +343,7 @@
             <div class="alt-text">
                 <h3>Jasper IQ layer</h3>
                 <p>Bring your brand guidelines, tone, and messaging into every asset, ensuring authenticity and alignment across every channel and market.</p>
-                <a href="#" class="alt-link">See how it works →</a>
+                <span class="alt-link" onclick="demoAlert('Jasper IQ','Train Jasper on your brand voice, style guide, and messaging — then scale across every channel.')">See how it works →</span>
             </div>
             <div class="alt-image">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 3 3 0 0 0 .34 5.58 2.5 2.5 0 0 0 2.96 3.08 2.5 2.5 0 0 0 4.91.05L12 20V4.5Z"/><path d="M16 8V5c0-1.1.9-2 2-2"/><path d="M12 13h4"/><path d="M12 18h4a2 2 0 0 0 2-2v-1"/><path d="M12 8h4"/><circle cx="18" cy="5" r="1"/></svg>
@@ -356,7 +379,7 @@
                     <li><svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Basic support</li>
                     <li><svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> 1 brand voice</li>
                 </ul>
-                <a href="#" class="btn btn-secondary" style="width:100%;justify-content:center" onclick="selectPlan('Creator')">Get started</a>
+                <span class="btn btn-secondary" style="width:100%;justify-content:center" onclick="selectPlan('Creator')">Get started</span>
             </div>
             <div class="pricing-card featured">
                 <div class="pricing-badge">Most popular</div>
@@ -370,7 +393,7 @@
                     <li><svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> 5 brand voices</li>
                     <li><svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Analytics dashboard</li>
                 </ul>
-                <a href="#" class="btn btn-primary" style="width:100%;justify-content:center" onclick="selectPlan('Pro')">Start free trial</a>
+                <span class="btn btn-primary" style="width:100%;justify-content:center" onclick="selectPlan('Pro')">Start free trial</span>
             </div>
             <div class="pricing-card">
                 <div class="pricing-name">Business</div>
@@ -384,7 +407,7 @@
                     <li><svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> API access</li>
                     <li><svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> SLA guarantee</li>
                 </ul>
-                <a href="#" class="btn btn-secondary" style="width:100%;justify-content:center" onclick="selectPlan('Business')">Contact sales</a>
+                <span class="btn btn-secondary" style="width:100%;justify-content:center" onclick="selectPlan('Business')">Contact sales</span>
             </div>
         </div>
         <p class="pricing-note">All plans include a 7-day free trial. No credit card required.</p>
@@ -396,12 +419,12 @@
     <div class="container">
         <div class="section-heading"><h2>Frequently asked questions</h2></div>
         <div class="faq-grid">
-            <div class="faq-item"><div class="faq-q">What is Jasper?</div><div class="faq-a">Jasper is an AI-powered marketing platform that helps teams create, manage, and scale content across all channels using intelligent agents.</div></div>
-            <div class="faq-item"><div class="faq-q">How does the free trial work?</div><div class="faq-a">Sign up and get full access to all Pro features for 7 days. No credit card required.</div></div>
-            <div class="faq-item"><div class="faq-q">Can I cancel anytime?</div><div class="faq-a">Yes, you can cancel your subscription at any time with no cancellation fees.</div></div>
-            <div class="faq-item"><div class="faq-q">Do you offer discounts?</div><div class="faq-a">We offer annual plans at a 20% discount, and special pricing for nonprofits and educators.</div></div>
-            <div class="faq-item"><div class="faq-q">What support is included?</div><div class="faq-a">All plans include email support. Pro and Business plans include priority chat and phone support.</div></div>
-            <div class="faq-item"><div class="faq-q">Is my data secure?</div><div class="faq-a">Yes. We use enterprise-grade encryption, SOC 2 compliance, and regular security audits.</div></div>
+            <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">What is Jasper?</div><div class="faq-a">Jasper is an AI-powered marketing platform that helps teams create, manage, and scale content across all channels using intelligent agents.</div></div>
+            <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">How does the free trial work?</div><div class="faq-a">Sign up and get full access to all Pro features for 7 days. No credit card required.</div></div>
+            <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Can I cancel anytime?</div><div class="faq-a">Yes, you can cancel your subscription at any time with no cancellation fees.</div></div>
+            <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Do you offer discounts?</div><div class="faq-a">We offer annual plans at a 20% discount, and special pricing for nonprofits and educators.</div></div>
+            <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">What support is included?</div><div class="faq-a">All plans include email support. Pro and Business plans include priority chat and phone support.</div></div>
+            <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Is my data secure?</div><div class="faq-a">Yes. We use enterprise-grade encryption, SOC 2 compliance, and regular security audits.</div></div>
         </div>
     </div>
 </section>
@@ -410,81 +433,130 @@
 <footer>
     <div class="container">
         <div class="footer-brand">
-            <a href="#" class="nav-logo" style="color:white">Jasper<span class="nav-logo-dot"></span></a>
+            <a href="#" class="nav-logo" style="color:white" onclick="scrollToTop(event)">Jasper<span class="nav-logo-dot"></span></a>
             <p>Jasper is the AI platform for modern marketing teams.</p>
         </div>
         <div class="footer-col">
             <h4>Product</h4>
-            <ul><li><a href="#">Features</a></li><li><a href="#">Pricing</a></li><li><a href="#">Integrations</a></li><li><a href="#">Changelog</a></li></ul>
+            <ul>
+                <li><span onclick="scrollToSection('platform')">Features</span></li>
+                <li><span onclick="scrollToSection('pricing')">Pricing</span></li>
+                <li><span onclick="demoAlert('Integrations','Jasper integrates with 50+ tools including Slack, HubSpot, Salesforce, and more.')">Integrations</span></li>
+                <li><span onclick="demoAlert('Changelog','See the latest product updates and new features.')">Changelog</span></li>
+            </ul>
         </div>
         <div class="footer-col">
             <h4>Company</h4>
-            <ul><li><a href="#">About</a></li><li><a href="#">Careers</a></li><li><a href="#">Blog</a></li><li><a href="#">Press</a></li></ul>
+            <ul>
+                <li><span onclick="demoAlert('About','Learn more about our mission and team.')">About</span></li>
+                <li><span onclick="demoAlert('Careers','Join our team! View open positions.')">Careers</span></li>
+                <li><span onclick="demoAlert('Blog','Read the latest marketing insights and product updates.')">Blog</span></li>
+                <li><span onclick="demoAlert('Press','Media resources and press contact.')">Press</span></li>
+            </ul>
         </div>
         <div class="footer-col">
             <h4>Resources</h4>
-            <ul><li><a href="#">Help Center</a></li><li><a href="#">API Docs</a></li><li><a href="#">Community</a></li><li><a href="#">Partners</a></li></ul>
+            <ul>
+                <li><span onclick="demoAlert('Help Center','Search our knowledge base for answers.')">Help Center</span></li>
+                <li><span onclick="demoAlert('API Docs','Build custom integrations with our API.')">API Docs</span></li>
+                <li><span onclick="demoAlert('Community','Join 10,000+ marketers in our community.')">Community</span></li>
+                <li><span onclick="demoAlert('Partners','Become a Jasper partner.')">Partners</span></li>
+            </ul>
         </div>
         <div class="footer-col">
             <h4>Legal</h4>
-            <ul><li><a href="#">Privacy</a></li><li><a href="#">Terms</a></li><li><a href="#">Security</a></li><li><a href="#">Cookies</a></li></ul>
+            <ul>
+                <li><span onclick="demoAlert('Privacy Policy','View our privacy policy.')">Privacy</span></li>
+                <li><span onclick="demoAlert('Terms of Service','View our terms of service.')">Terms</span></li>
+                <li><span onclick="demoAlert('Security','Learn about our security practices.')">Security</span></li>
+                <li><span onclick="demoAlert('Cookie Policy','View our cookie policy.')">Cookies</span></li>
+            </ul>
         </div>
     </div>
     <div class="container footer-bottom">
         <span>© 2026 Jasper. All rights reserved.</span>
         <div class="footer-social">
-            <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a>
-            <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg></a>
-            <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29.94 29.94 0 0 0 1 12a29.94 29.94 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2A29.94 29.94 0 0 0 23 12a29.94 29.94 0 0 0-.46-5.58z"/><polygon points="10 15 15 12 10 9 10 15"/></svg></a>
-            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/></svg></a>
+            <a href="#" onclick="demoAlert('Twitter','Follow @JasperAI on Twitter')" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a>
+            <a href="#" onclick="demoAlert('LinkedIn','Follow Jasper on LinkedIn')" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg></a>
+            <a href="#" onclick="demoAlert('YouTube','Watch Jasper tutorials on YouTube')" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29.94 29.94 0 0 0 1 12a29.94 29.94 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2A29.94 29.94 0 0 0 23 12a29.94 29.94 0 0 0-.46-5.58z"/><polygon points="10 15 15 12 10 9 10 15"/></svg></a>
+            <a href="#" onclick="demoAlert('Instagram','Follow @Jasper on Instagram')" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/></svg></a>
         </div>
     </div>
 </footer>
 
+<!-- Back to top -->
+<button class="back-to-top" id="backToTop" onclick="scrollToTop()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></button>
 <script>
-// CTA interactions
-function startTrial(){
-    const email = prompt('Enter your email to start a free 7-day trial (no credit card required):');
-    if(email) alert('🎉 Thanks! In production, this would create your account and redirect to onboarding.\n\nDemo email: ' + email);
+// ── Navigation ──
+function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
 }
-function watchDemo(){
-    alert('▶️ Demo video would play here.\n\nIn production: embedded video or redirect to demo page.');
+function closeMobileMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
 }
-function selectPlan(plan){
-    alert('✅ You selected the ' + plan + ' plan.\n\nIn production, this would go to checkout or contact form.');
+function scrollToSection(id, e) {
+    if (e) e.preventDefault();
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function scrollToTop(e) {
+    if (e) e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Stat counter animation
-function animateStats(){
+// ── Demo interactions ──
+function demoAlert(title, msg) {
+    alert('📋 ' + title + '\n\n' + msg);
+}
+function demoSignIn() {
+    alert('🔐 Sign In\n\nDemo: This would open the login page.\nIn production: OAuth with Google, SSO, or email/password.');
+}
+function startTrial() {
+    const email = prompt('Enter your email to start a free 7-day trial (no credit card required):');
+    if (email) alert('🎉 Thanks! In production, this would create your account and redirect to onboarding.\n\nDemo email: ' + email);
+}
+function watchDemo() {
+    alert('▶️ Watch Demo\n\nIn production, this would play an embedded product demo video or open a demo page.');
+}
+function selectPlan(plan) {
+    const msgs = {
+        Creator: 'Start with Creator at $49/mo. Perfect for individual creators.',
+        Pro: 'Start your 7-day free trial of Pro at $99/mo. Most popular choice!',
+        Business: 'Contact our sales team for a custom Business plan tailored to your needs.'
+    };
+    alert('✅ ' + plan + ' Plan\n\n' + (msgs[plan] || ''));
+}
+
+// ── Stat counter animation ──
+let statAnimated = false;
+function animateStats() {
+    if (statAnimated) return;
+    statAnimated = true;
     const stat1 = document.getElementById('stat1');
-    if(!stat1) return;
+    if (!stat1) return;
     let count = 0;
     const target = 100;
     const timer = setInterval(() => {
         count += 1;
         stat1.textContent = count + 'K+';
-        if(count >= target) clearInterval(timer);
+        if (count >= target) clearInterval(timer);
     }, 20);
 }
 
-// Scroll-triggered stat animation
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-        if(entry.isIntersecting){ animateStats(); observer.unobserve(entry.target); }
+        if (entry.isIntersecting) { animateStats(); observer.unobserve(entry.target); }
     });
 }, { threshold: 0.5 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const statsSection = document.getElementById('stat1')?.closest('section');
-    if(statsSection) observer.observe(statsSection);
-
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-        link.addEventListener('click', function(e){
-            const target = document.querySelector(this.getAttribute('href'));
-            if(target){ e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-        });
+    // Back to top visibility
+    const backBtn = document.getElementById("backToTop");
+    window.addEventListener("scroll", () => {
+        backBtn.classList.toggle("visible", window.scrollY > 500);
     });
+    const statsSection = document.getElementById('stat1')?.closest('section');
+    if (statsSection) observer.observe(statsSection);
 });
 </script>
 </body>
