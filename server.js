@@ -267,6 +267,8 @@ app.delete('/api/admin/users/:id', verifyToken, requireAdmin, (req, res) => {
   res.json({ ok: true, removed: { id: removed.id, name: removed.name, email: removed.email } });
 });
 
+
+app.get("/api/health", (req, res) => res.json({ status: "ok", time: new Date().toISOString() }));
 // ── Start ──
 ensureAdmin();
 app.listen(PORT, () => console.log('Server running at http://localhost:' + PORT));
